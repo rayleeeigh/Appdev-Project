@@ -16,12 +16,12 @@
         <section class="relative h-screen w-full flex items-center justify-center">
             <img src="storage/home.png" class="z-0 absolute h-full w-full">
 
-            <div class="z-10 container absolute h-4/5 w-1/2 bg-white bg-opacity-50 overflow-auto inline-block">
-
+            <div class="z-10 container absolute h-100 w-1/2 bg-white bg-opacity-30 mb-7 overflow-auto inline-block">
+                <h2 class="mt-6 text-3xl font-bold text-center text-white mb-5 md:text-4xl">Ingredients</h2>
                 <form action="/generate" method="POST">
                         <% for(x=0;x<ingredients.length;x++){%>
                             <div class="ml-2 inline-block h-10 w-52 pt-2">
-                                <div class="pretty p-default p-thick p-round p-pulse p-bigger text-lg">
+                                <div class="pretty p-default p-thick p-round p-pulse p-bigger text-lg text-white">
                                     <input type="checkbox" id="ingredient1" name="ingredient" value="<%-ingredients[x].ingredientID%>">
                                     <div class="state p-danger p-danger-o">
                                         <label class="font-mono"><%=ingredients[x].ingredientName%></label>
@@ -43,18 +43,15 @@
         <%if (dishes){%>
 
             <section class="bg-white" id="result">
-                <div class="max-w-5xl px-6 py-16 mx-auto">
+                <div class="max-w-5xl px-6 py-16 mx-auto text-center">
 
                     <% for(x=0;x<dishes.length;x++){%>
-                        <div class="inline-block w-80 rounded overflow-hidden shadow-lg" style="height:35rem">
+                        <div class="inline-block w-80 rounded overflow-hidden shadow-lg" style="height:24rem">
                             <img class="w-full h-64" src="storage/Dishes/<%=dishes[x].dishPic%>">
                             <div class="px-6 py-4">
                                 <div class="font-bold text-xl mb-2"><a href="/dishProfile/<%=dishes[x].dishID%>"><button><%=dishes[x].dishName%></button></a></div>
-                                <p class="text-gray-700 text-base overflow-auto h-44 w-full">
-                                    <%=dishes[x].dishDescription%>...
-                                </p>
                                 <div class="bottom-0 container pb-8 flex justify-center">
-                                    <button type="button" class="text-white text-sm py-2.5 px-5 rounded-md bg-gray-700 hover:bg-gray-900 hover:shadow-lg" onclick="toggleModal('modal<%=dishes[x].dishID%>')">Show more...</button>
+                                    <button type="button" class="text-white text-sm py-2.5 px-5 rounded-md bg-gray-700 hover:bg-gray-900 hover:shadow-lg" onclick="toggleModal('modal<%=dishes[x].dishID%>')">Show More</button>
                                 </div>
                             </div>
 
