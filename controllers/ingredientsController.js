@@ -109,23 +109,7 @@ exports.getIngredients = async(req, res) => {
         }
     }
 
-    // for (a = 0; a < dataDI.length; a++) {
 
-    //     dataI[n] = await ingredients.model.findOne({
-    //         where: {
-    //             ingredientID: dataDI[a].ingredientID
-    //         }
-    //     })
-    //     n++;
-    // }
-
-    // let data = await dish_ingredients.model.findAll()
-
-    // res.send(data)
-
-    // res.send(dataI);
-
-    // res.send(dataD);
 
 
 

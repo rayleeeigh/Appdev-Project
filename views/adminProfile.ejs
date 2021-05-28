@@ -252,9 +252,9 @@
                                                                 <label class="font-mono"><%=allingredients[x].ingredientName%></label>
                                                             </div>
                                                         </div>
-                                                        <div class="inline-block" id="addoption<%=allingredients[x].ingredientID%>" style="display:none">
-                                                            <input type="text" id="amount" name="addamount" placeholder="Amount" class="w-20 inline-block appearance-none text-black text-opacity-50 rounded shadow py-1 px-2  mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200" value="0">
-                                                            <select name="addmeasurement" id="measurement">
+                                                        <div class="inline-block" id="addoption<%=allingredients[x].ingredientID%>" style="display:none" hidden>
+                                                            <p>Starts with<input type="text" id="amount" name="addamount" placeholder="Amount" class="w-5 inline-block appearance-none text-black text-opacity-50 ml-2 mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200" value="0" disabled> amount</p>
+                                                            <select name="addmeasurement" id="measurement" hidden>
                                                                 <option value="teaspoon">Teaspoon</option>
                                                                 <option value="cup">Cup</option>
                                                                 <option value="whole">Whole</option>
@@ -264,7 +264,7 @@
                                                         </div>
                                                     </div>
                                             <%}%>
-                                        <p class="my-4 text-red-500 text-sm leading-relaxed">If your ingredient is not here, click here to add ingredients</p>
+                                        <p class="my-4 text-red-500 text-sm leading-relaxed">If your ingredient is not here, go to Manage Ingredients tab</p>
                                             
 
                                     </div>
