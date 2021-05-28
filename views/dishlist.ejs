@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+
+<head>
+    <%- include('partials/head'); %>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+    <div>
+        <header class="relative bg-indigo-400 w-full" x-data="{ isOpen: false }">
+            <%- include('partials/header'); %>
+        </header>
+
+        <section class="w-full relative flex items-center justify-center h-screen">
+            <img src="storage/dishlist.png" class="z-0 absolute h-full">
+            <div class="z-10 text-center">
+                <p class="text-xl font-medium tracking-wider text-gray-300">Lorem ipsum dolor</p>
+                <h2 class="mt-6 text-3xl font-bold text-white md:text-5xl">Lorem ipsum dolor sit amet, <br> consectetur adipiscing elit</h2>
+
+                <div class="flex justify-center mt-8">
+                    <a class="px-8 py-2 text-lg font-medium text-white transition-colors duration-300 transform border rounded hover:bg-black" href="#">Get Started</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white">
+            <div class="ml-40 max-w-6xl px-6 py-16 mx-auto">
+
+                <% for(x=0;x<dishes.length;x++){%>
+                    <div class="inline-block w-80 rounded overflow-hidden shadow-lg" style="height:34rem">
+                        <img class="w-full h-64" src="storage/Dishes/<%=dishes[x].dishPic%>">
+                        <div class="px-6 py-4">
+                            <div class="font-bold text-xl mb-2"><a href="/dishProfile/<%=dishes[x].dishID%>"><button><%=dishes[x].dishName%></button></a></div>
+                            <p class="text-gray-700 text-base overflow-auto h-44 w-full">
+                                <%=dishes[x].dishDescription%>
+                            </p>
+                        </div>
+                        <div class="bottom-0 container pb-8 flex justify-center">
+                            <button type="button" class="text-white text-sm py-2.5 px-5 rounded-md bg-gray-700 hover:bg-gray-900 hover:shadow-lg" onclick="toggleModal('modal<%=dishes[x].dishID%>')">Show more...</button>
+                        </div>
+                    </div>
+                    <% } %>
+
+            </div>
+        </section>
+
+        <% for(x=0;x<dishes.length;x++){%>
+            <div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal<%=dishes[x].dishID%>">
+                <div class="relative w-auto my-6 mx-auto max-w-2xl">
+                    <!--content-->
+                    <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                        <!--header-->
+                        <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                            <h3 class="text-3xl font-semibold">
+                                <%=dishes[x].dishName%>
+                            </h3>
+                        </div>
+                        <!--body-->
+                        <div class="relative p-6 flex-auto">
+                            <img class="w-full h-96" src="<%=dishes[x].dishPic%>">
+                            <p class="my-4 text-blueGray-500 text-lg leading-relaxed">
+                                <%=dishes[x].dishDescription%>
+                            </p>
+
+                            <% for(y=0;y<dishingredient[x].length;y++){%>
+                                <p class="my-4 text-blueGray-500 text-lg leading-relaxed">
+                                    <%=dishingredient[x][y].amount%>
+                                        <%=dishingredient[x][y].measurement%>
+                                            <%=ingredient[x][y].ingredientName%>
+                                </p>
+                                <%}%>
+
+                        </div>
+                        <!--footer-->
+                        <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                            <%if(!account){}else if(account && dishes[x].check=="1"){%>
+
+                                <button type="button" class="text-white text-sm py-2.5 px-5 rounded-md bg-gray-700 hover:bg-gray-900 hover:shadow-lg">Added Already</button>
+                                <%}else if(account && dishes[x].check=="0"){%>
+
+                                    <a href="/addFave?id=<%=dishes[x].dishID%>"><button type="button" class="text-white text-sm py-2.5 px-5 rounded-md bg-gray-700 hover:bg-gray-900 hover:shadow-lg">Add to Favourites</button></a>
+                                    <%}%>
+                                        <button class="text-gray-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onclick="toggleModal('modal<%=dishes[x].dishID%>')">
+                    Close
+                  </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+                <footer class="border-t">
+                    <%- include('partials/footer'); %>
+                </footer>
+    </div>
+    <script type="text/javascript">
+        function toggleModal(modalID) {
+            document.getElementById(modalID).classList.toggle("hidden");
+            document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+            document.getElementById(modalID).classList.toggle("flex");
+            document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+        }
+    </script>
+</body>
+
+</html>

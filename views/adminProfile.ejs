@@ -1,0 +1,483 @@
+<!doctype html>
+<html>
+
+<head>
+    <%- include('partials/head'); %>
+</head>
+
+<body>
+
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+    <div>
+        <header class="relative bg-indigo-400 w-full" x-data="{ isOpen: false }">
+            <%- include('partials/header'); %>
+        </header>
+
+        <!-- component -->
+        <div class="top h-64 w-full bg-blue-600 overflow-hidden relative">
+            <img src="https://images.unsplash.com/photo-1503264116251-35a269479413?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80" alt="" class="bg w-full h-full object-cover object-center absolute z-0">
+            <div class="flex flex-col justify-center items-center relative h-full bg-black bg-opacity-50 text-white">
+                <img src="storage/profilePics/<%=account.userImage%>" class="h-24 w-24 object-cover rounded-full">
+                <h1 class="text-2xl font-semibold">
+                    <%=account.userName%>
+                </h1>
+                <h4 class="text-sm font-semibold">Joined Since '19</h4>
+            </div>
+        </div>
+        <div class="grid grid-cols-12 bg-white ">
+
+            <div class="col-span-12 w-full px-3 py-6 justify-center flex space-x-4 border-b border-solid md:space-x-0 md:space-y-4 md:flex-col md:col-span-2 md:justify-start ">
+
+                <button id="basicbutton" onclick="switchBasic('basicinfo','favdish','basicbutton','favbutton','ingpage','ingbutton')" class="text-sm p-2 bg-gray-500 text-white text-center rounded font-bold">Basic Information</button>
+                <button id="favbutton" onclick="switchDish('basicinfo','favdish','basicbutton','favbutton','ingpage','ingbutton')" class="text-sm p-2 bg-gray-200 text-center rounded font-semibold hover:bg-gray-500 hover:text-gray-200">Manage Dishes</button>
+                <button id="ingbutton" onclick="switchIngredient('basicinfo','favdish','basicbutton','favbutton','ingpage','ingbutton')" class="text-sm p-2 bg-gray-200 text-center rounded font-semibold hover:bg-gray-500 hover:text-gray-200">Manage Ingredients</button>
+
+            </div>
+
+            <div class="col-span-12 md:border-solid md:border-l md:border-black md:border-opacity-25 h-full pb-12 md:col-span-10" id="basicinfo" style="display:block">
+                <div class="px-4 pt-4">
+                    <div class="flex flex-col space-y-8">
+
+                        <div class="relative">
+                            <h3 class="inline-block text-2xl font-semibold">Basic Information</h3>
+                            <button onclick="edit('profilepic','fullname','username','email','editpassword','biography','submits')" class="right-0 absolute px-4 py-1 text-sm font-medium text-center bg-gray-500 text-gray-200 transition-colors duration-300 transform border rounded hover:bg-black">Edit Profile</button>
+                            <hr>
+                        </div>
+                        <form method="POST" action="/profile" class="flex flex-col space-y-8" enctype="multipart/form-data">
+                            <input type="text" id="id" name="id" value="<%=account.userID%>" hidden>
+                            <div style="display:none" class="form-item" id="profilepic">
+                                <label class="text-xl ">Profile Picture:</label>
+                                <input type="file" id="image" name="image" accept="image/*" class="w-full appearance-none text-black text-opacity-50 rounded shadow py-1 px-2  mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200">
+                            </div>
+                            <div class="form-item">
+                                <label class="text-xl ">Full Name</label>
+                                <input type="text" id="fullname" name="fullname" value="<%=account.userFullName%>" class="w-full appearance-none text-black text-opacity-50 rounded shadow py-1 px-2  mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200" disabled>
+                            </div>
+
+                            <div class="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4">
+
+                                <div class="form-item w-full">
+                                    <label class="text-xl ">Username</label>
+                                    <input id="username" name="username" type="text" value="<%=account.userName%>" class="w-full appearance-none text-black text-opacity-50 rounded shadow py-1 px-2 mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200 text-opacity-25 " disabled>
+                                </div>
+
+                                <div class="form-item w-full">
+                                    <label class="text-xl ">Email</label>
+                                    <input type="email" id="email" name="email" value="<%=account.userEmail%>" class="w-full appearance-none text-black text-opacity-50 rounded shadow py-1 px-2 mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200 text-opacity-25 " disabled>
+                                </div>
+                            </div>
+                            <div style="display:none" id="editpassword" class="form-item">
+                                <label class="text-xl ">Password</label>
+                                <input type="password" id="password" name="password" value="<%=account.userPassword%>" class="w-full appearance-none text-black text-opacity-50 rounded shadow py-1 px-2  mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200">
+                            </div>
+
+                            <div>
+                                <h3 class="text-2xl font-semibold ">More About Me</h3>
+                                <hr>
+                            </div>
+
+                            <div class="form-item w-full">
+                                <label class="text-xl ">Biography</label>
+                                <textarea id="biography" name="biography" cols="30" rows="10" class="w-full appearance-none text-black text-opacity-50 rounded shadow py-1 px-2 mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200 text-opacity-25 " disabled><%=account.userBio%></textarea>
+                            </div>
+                            <button id="submits" style="display:none" class="right-0 px-4 py-1 text-sm font-medium text-center bg-gray-500 text-gray-200 transition-colors duration-300 transform border rounded hover:bg-black" type="submit">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-span-12 md:border-solid md:border-l md:border-black md:border-opacity-25 h-full pb-12 md:col-span-10" id="favdish" style="display:none">
+                <div class="px-4 pt-4">
+                    <div class="relative">
+                        <h3 class="inline-block text-2xl font-semibold">Dishes</h3>
+                        <button onclick="toggleModal('addmodal')" class="right-0 absolute px-4 py-1 text-sm font-medium text-center bg-gray-500 text-gray-200 transition-colors duration-300 transform border rounded hover:bg-black">Add Dish</button>
+                        <hr>
+                    </div>
+                    <div class="ml-20 max-w-6xl px-6 py-16 mx-auto">
+
+                        <% for(x=0;x<dishes.length;x++){%>
+                            <div class="inline-block w-72 rounded overflow-hidden shadow-lg" style="height:34rem">
+                                <img class="w-full h-64" src="storage/Dishes/<%=dishes[x].dishPic%>">
+                                <div class="px-6 py-4">
+                                    <div class="font-bold text-xl mb-2"><%=dishes[x].dishName%></div>
+                                    <p class="text-gray-700 text-base overflow-auto h-44 w-full">
+                                        <%=dishes[x].dishDescription%>
+                                    </p>
+                                </div>
+                                <div class="bottom-0 container pb-8 flex justify-center">
+                                    <button type="button" class="text-white text-sm py-2.5 px-5 rounded-md bg-gray-700 hover:bg-gray-900 hover:shadow-lg" onclick="toggleModal('modal<%=dishes[x].dishID%>')">Show more...</button>
+                                </div>
+                            </div>
+                            <% } %>
+
+                    </div>
+
+                    <% for(x=0;x<dishes.length;x++){%>
+                        <form method="POST" action="/editdishing">
+                        <div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal<%=dishes[x].dishID%>">
+                            <div class="relative w-auto my-6 mx-auto max-w-2xl">
+                                <!--content-->
+                                <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                    <!--header-->
+                                    <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                                        <input type="text" id="dishname<%=dishes[x].dishID%>" name="editdishname" class="bg-white text-3xl font-semibold" value="<%=dishes[x].dishName%>" disabled>
+                                    </div>
+                                    <!--body-->
+                                    <div class="relative p-6 flex-auto">
+                                        <img class="w-full h-96" id="dishpic<%=dishes[x].dishID%>" name="dishpic" src="storage/Dishes/<%=dishes[x].dishPic%>">
+                                        <p class="my-4 text-blueGray-500 text-lg leading-relaxed">
+                                            <textarea class="w-full h-28" id="dishdesc<%=dishes[x].dishID%>" name="editdishdesc" disabled><%=dishes[x].dishDescription%></textarea>
+                                        </p>
+                                        <input type="text" name="editdishid" value="<%=dishes[x].dishID%>" hidden>
+                                        <p class="font-bold my-4 text-blueGray-500 text-lg leading-relaxed">Dish Menu</p>
+                                        <select name="editdishmenu" id="dishmenu<%=dishes[x].dishID%>" disabled>
+                                            <option value="Breakfast" <% if (dishes[x].dishMenu == "Breakfast"){%>selected<%}%>> Breakfast</option>
+                                            <option value="Lunch" <% if (dishes[x].dishMenu == "Lunch"){%>selected<%}%>>Lunch</option>
+                                            <option value="Dinner" <% if (dishes[x].dishMenu == "Dinner"){%>selected<%}%>>Dinner</option>
+                                        </select>
+
+                                        <button type="submit" style="display:none" id="savedishIng<%=dishes[x].dishID%>" class="text-white bg-gray-500 font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                                        Save Changes
+                                       </button>
+                                        </form>
+
+                                        <p class="font-bold my-4 text-blueGray-500 text-lg leading-relaxed">Ingredients</p>
+                                        <div id="showdishIng<%=dishes[x].dishID%>" style="display:block">
+                                            <% for(y=0;y<dishingredient[x].length;y++){%>
+                                                <p class="my-4 text-blueGray-500 text-lg leading-relaxed">
+                                                    <%=dishingredient[x][y].amount%>
+                                                        <%=dishingredient[x][y].measurement%>
+                                                            <%=ingredient[x][y].ingredientName%>
+                                                </p>
+                                            <%}%>
+                                        </div>
+
+                                        <div id="editdishIng<%=dishes[x].dishID%>" style="display:none">
+                                            <% var j=-1; for(z=0;z<allingredients.length;z++){ var check = -1;%>
+                                                <form method="POST" action="/editding">
+                                                <div class="block">
+                                                    <div class="pretty p-default p-thick p-round p-pulse p-bigger tezt-lg w-52">
+                                                        <input onclick="showOption('ingredient<%=dishes[x].dishID%><%=allingredients[z].ingredientID%>','option<%=dishes[x].dishID%><%=allingredients[z].ingredientID%>','beditsave<%=dishes[x].dishID%><%=allingredients[z].ingredientID%>')" type="checkbox" id="ingredient<%=dishes[x].dishID%><%=allingredients[z].ingredientID%>" name="editingredient" value="<%=allingredients[z].ingredientID%>"
+                                                        
+                                                        <%for(i=0;i<dishingredient[x].length && dishingredient[x][i].ingredientID != allingredients[z].ingredientID;i++){}
+                                                            if (i<dishingredient[x].length){%>
+                                                                checked
+                                                            <%check = 1;j++;}%>
+                                                        >
+
+                                                        <div class="state p-danger p-danger-o">
+                                                            <label class="font-mono"><%=allingredients[z].ingredientName%></label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="option<%=dishes[x].dishID%><%=allingredients[z].ingredientID%>" <%if (check == 1){%> style="display:inline-block" <%} else{%> style="display:none"  <%}%>>
+                                                        <input type="text" id="amount" name="editamount" class="w-20 inline-block appearance-none text-black text-opacity-50 rounded shadow py-1 px-2  mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200"<%if (check==1){%>value="<%=dishingredient[x][j].amount%>"<%}else{%>value="0"<%}%>>
+                                                        <input type="text" name="ingid" value="<%=allingredients[z].ingredientID%>" style="display:none">
+                                                        <input type="text" name="dishid" value="<%=dishes[x].dishID%>" style="display:none">
+                                                        <input style="display:none" type="text" id="diID" name="diID" class="w-20 inline-block appearance-none text-black text-opacity-50 rounded shadow py-1 px-2  mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200"<%if (check==1){%>value="<%=dishingredient[x][j].dishIngID%>"<%}else{%>value="0"<%}%>>
+                                                        <select name="editmeasurement" id="measurement">
+                                                            <option value="teaspoon" <%if (check==1 && dishingredient[x][j].measurement == "teaspoon" ){%> selected <%}%>>Teaspoon</option>
+                                                            <option value="cup" <%if (check==1 && dishingredient[x][j].measurement == "cup" ){%> selected <%}%>>Cup</option>
+                                                            <option value="whole" <%if (check==1 && dishingredient[x][j].measurement == "whole" ){%> selected <%}%>>Whole</option>
+                                                            <option value="part" <%if (check==1 && dishingredient[x][j].measurement == "part" ){%> selected <%}%>>Part</option>
+                                                            <option value="pound" <%if (check==1 && dishingredient[x][j].measurement == "pound" ){%> selected <%}%>>Pound</option>
+                                                        </select>
+                                                    </div>
+                                                    <button id="beditsave<%=dishes[x].dishID%><%=allingredients[z].ingredientID%>" <%if (check == 1){%> style="display:inline-block" <%} else{%> style="display:none"  <%}%> class="text-black text-sm py-2.5 px-5 rounded-md hover:text-green-500" type="submit">SAVE</button>
+                                                    <%if (check==1){%><a href="/deletedishingredient?id=<%=dishingredient[x][j].dishIngID%>">  <button class="text-white text-sm py-2.5 px-5 rounded-md text-red-500 " type="button" onclick="toggleModal('modal<%=dishes[x].dishID%>')">
+                                                    DELETE
+                                                    </button></a>
+                                                    <%}%>
+                                                </div>
+                                            </form>
+                                        <%}%>
+                                        </div>
+
+                                    </div>
+                                    <!--footer-->
+                                    <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                                        <a href="/deleteDish?id=<%=dishes[x].dishID%>">  <button class="text-gray-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onclick="toggleModal('modal<%=dishes[x].dishID%>')">
+                                       Delete Dish
+                                      </button></a>
+                                        <a style="cursor:pointer" id="beditdishIng<%=dishes[x].dishID%>" onclick="editDish('dishname<%=dishes[x].dishID%>','dishdesc<%=dishes[x].dishID%>','dishmenu<%=dishes[x].dishID%>','showdishIng<%=dishes[x].dishID%>','editdishIng<%=dishes[x].dishID%>','savedishIng<%=dishes[x].dishID%>','beditdishIng<%=dishes[x].dishID%>');" class="text-gray-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                                        Edit Dish
+                                        </a>
+                                        <button class="text-gray-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onclick="toggleModal('modal<%=dishes[x].dishID%>')">
+                                        Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+
+
+                        <div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="addmodal">
+                            <div class="relative w-auto my-6 mx-auto max-w-2xl">
+                                <!--content-->
+                                <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                    <!--header-->
+                                    <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                                        <h3 class="text-3xl font-semibold">
+                                            Add Dish
+                                        </h3>
+                                    </div>
+                                    <!--body-->
+                                    <form method="POST" action="/adddish" enctype="multipart/form-data">
+                                    <div class="relative p-6 flex-auto">
+
+                                        <input type="file" id="dishpic" name="dishpic" accept="dishpic/*" class="w-full appearance-none text-black text-opacity-50 rounded shadow py-1 px-2  mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200">
+
+                                        <p class="my-4 text-blueGray-500 text-lg leading-relaxed">Dish Name</p>
+                                        <input type="text" id="dishname" name="dishname" placeholder="Dish Name..." class="w-full appearance-none text-black text-opacity-50 rounded shadow py-1 px-2  mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200">
+                                        
+                                        <p class="my-4 text-blueGray-500 text-lg leading-relaxed">Dish Menu</p>
+                                        <select name="dishmenu" id="dishmenu">
+                                            <option value="Breakfast">Breakfast</option>
+                                            <option value="Lunch">Lunch</option>
+                                            <option value="Dinner">Dinner</option>
+                                          </select>
+                                        
+                                        <p class="my-4 text-blueGray-500 text-lg leading-relaxed">Dish Description</p>
+                                        <textarea id="dishdescription" name="dishdescription" cols="30" rows="10" class="w-full appearance-none text-black text-opacity-50 rounded shadow py-1 px-2 mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200 text-opacity-25 "></textarea>
+                                        
+                                        <p class="my-4 text-blueGray-500 text-lg leading-relaxed">Ingredients</p>
+                                            <% for(x=0;x<allingredients.length;x++){%>
+                                                    <div class="block">
+                                                        <div class="pretty p-default p-thick p-round p-pulse p-bigger text-lg w-52">
+                                                            <input onclick="showOption('addingredient<%=allingredients[x].ingredientID%>','addoption<%=allingredients[x].ingredientID%>')" type="checkbox" id="addingredient<%=allingredients[x].ingredientID%>" name="addingredient" value="<%-allingredients[x].ingredientID%>">
+                                                            <div class="state p-danger p-danger-o">
+                                                                <label class="font-mono"><%=allingredients[x].ingredientName%></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inline-block" id="addoption<%=allingredients[x].ingredientID%>" style="display:none">
+                                                            <input type="text" id="amount" name="addamount" placeholder="Amount" class="w-20 inline-block appearance-none text-black text-opacity-50 rounded shadow py-1 px-2  mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200" value="0">
+                                                            <select name="addmeasurement" id="measurement">
+                                                                <option value="teaspoon">Teaspoon</option>
+                                                                <option value="cup">Cup</option>
+                                                                <option value="whole">Whole</option>
+                                                                <option value="part">Part</option>
+                                                                <option value="pound">Pound</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                            <%}%>
+                                        <p class="my-4 text-red-500 text-sm leading-relaxed">If your ingredient is not here, click here to add ingredients</p>
+                                            
+
+                                    </div>
+                                    <!--footer-->
+                                    <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                                        <button type="submit" class="text-gray-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+                                       Add
+                                      </button>
+                                    </form>
+                                        <button class="text-gray-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onclick="toggleModal('addmodal')">
+                                        Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                </div>
+            </div>
+
+            <div class="col-span-12 md:border-solid md:border-l md:border-black md:border-opacity-25 h-full pb-12 md:col-span-10" id="ingpage" style="display:none">
+                <div class="px-4 pt-4">
+                    <h3 class="inline-block text-2xl font-semibold">Ingredients</h3>
+                    <button onclick="toggleModal('addIngmodal')" class="right-0 absolute px-4 py-1 text-sm font-medium text-center bg-gray-500 text-gray-200 transition-colors duration-300 transform border rounded hover:bg-black">Add Ingredient</button>
+                    <hr>
+                </div>
+                <div class=" max-w-6xl px-6 py-16 mx-auto">
+
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                          <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Ingredient Name
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Ingredient Description
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Ingredient Type
+                            </th>
+                            <th scope="col" class="relative px-6 py-3">
+                                <span class="sr-only">Edit</span>
+                            </th>
+                            <th scope="col" class="relative px-6 py-3">
+                                <span class="sr-only">Delete</span>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <% for(x=0;x<allingredients.length;x++){ %>
+                                <form method="POST" action="/editIng">
+                                <input type="text" name="id" value="<%=allingredients[x].ingredientID%>" style="display:none">
+                          <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <div class="flex items-center">
+                                <div class="ml-4">
+                                  <div class="text-sm font-medium text-gray-900">
+                                    <input class="bg-white" type="text" id="ingname<%=allingredients[x].ingredientID%>" name="ingname" value="<%=allingredients[x].ingredientName%>" disabled>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="px-6 py-4">
+                              <div class="text-sm text-gray-900"><textarea id="ingdesc<%=allingredients[x].ingredientID%>" name="ingdesc" disabled><%=allingredients[x].ingredientDescription%></textarea></div>
+                            </td>
+                            <td class="px-6 py-4">
+                              <span class="px-2 inline-flex text-xs leading-5 font-semibold">
+                                <input class="bg-white" type="text" id="ingtype<%=allingredients[x].ingredientID%>" name="ingtype" value="<%=allingredients[x].ingredientType%>" disabled>
+                              </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <input type="button" id="edit<%=allingredients[x].ingredientID%>" onclick="editIng('ingname<%=allingredients[x].ingredientID%>','ingdesc<%=allingredients[x].ingredientID%>','ingtype<%=allingredients[x].ingredientID%>','edit<%=allingredients[x].ingredientID%>','submit<%=allingredients[x].ingredientID%>')" class="bg-white text-gray-600 hover:text-black" style="display:block; text-decoration:underline; cursor:pointer;" value="Edit">
+                                <button type="submit" id="submit<%=allingredients[x].ingredientID%>" type="submit" class="text-red-500 hover:text-black" value="Edit" style="display:none">Save Changes</button>
+                                </form>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <a href="/deleteIngredient?id=<%=allingredients[x].ingredientID%>" class="text-indigo-600 hover:text-indigo-900">Delete</a>
+                            </td>
+                          </tr>
+                          <%}%>
+                          
+              
+                          <!-- More people... -->
+                        </tbody>
+                      </table>
+
+                      <div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="addIngmodal">
+                        <div class="relative w-auto my-6 mx-auto max-w-2xl">
+                            <!--content-->
+                            <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                <!--header-->
+                                <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                                    <h3 class="text-3xl font-semibold">
+                                        Add Ingredient
+                                    </h3>
+                                </div>
+                                <!--body-->
+                                <form method="POST" action="/addIng">
+                                <div class="relative p-6 flex-auto">
+                                
+                                    <p class="my-4 text-blueGray-500 text-lg leading-relaxed">Ingredient Name</p>
+                                    <input type="text" id="ingname" name="ingname" placeholder="Ingredient Name..." class="w-full appearance-none text-black text-opacity-50 rounded shadow py-1 px-2  mr-2 focus:outline-none focus:shadow-outline focus:border-blue-200">
+                                    <p class="my-4 text-blueGray-500 text-lg leading-relaxed">Ingredient Type</p>
+                                    <select name="ingtype" id="ingtype">
+                                        <option value="Spice/Seasoning">Spice/Seasoning</option>
+                                        <option value="Meat">Meat</option>
+                                        <option value="Vegetable/Fruit">Vegetable/Fruit</option>
+                                        <option value="Basic">Basic</option>
+                                    </select>
+                                    <p class="my-4 text-blueGray-500 text-lg leading-relaxed">Ingredient Description</p>
+                                    <textarea class="w-full h-52" name="ingdesc" placeholder="Enter Description..."></textarea>
+                                </div>
+                                <!--footer-->
+                                <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                                    <button type="submit" class="text-gray-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+                                   Add
+                                  </button>
+                                </form>
+                                    <button class="text-gray-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onclick="toggleModal('addIngmodal')">
+                                    Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="border-t">
+            <%- include('partials/footer'); %>
+        </footer>
+    </div>
+
+    <script>
+        function switchDish($id1, $id2, $id3, $id4,$id5, $id6){
+            document.getElementById($id1).style.display = "none";
+            document.getElementById($id3).className = "text-sm p-2 bg-gray-200 text-center rounded font-semibold hover:bg-gray-500 hover:text-gray-200"
+            document.getElementById($id2).style.display = "block";
+            document.getElementById($id4).className = "text-sm p-2 bg-gray-500 text-white text-center rounded font-bold"
+            document.getElementById($id5).style.display = "none";
+            document.getElementById($id6).className = "text-sm p-2 bg-gray-200 text-center rounded font-semibold hover:bg-gray-500 hover:text-gray-200"
+        }
+
+        function switchBasic($id1, $id2, $id3, $id4,$id5, $id6){
+            document.getElementById($id1).style.display = "block";
+            document.getElementById($id3).className = "text-sm p-2 bg-gray-500 text-white text-center rounded font-bold"
+            document.getElementById($id2).style.display = "none";
+            document.getElementById($id4).className = "text-sm p-2 bg-gray-200 text-center rounded font-semibold hover:bg-gray-500 hover:text-gray-200"
+            document.getElementById($id5).style.display = "none";
+            document.getElementById($id6).className = "text-sm p-2 bg-gray-200 text-center rounded font-semibold hover:bg-gray-500 hover:text-gray-200"
+        }
+
+        function switchIngredient($id1, $id2, $id3, $id4,$id5, $id6){
+            document.getElementById($id1).style.display = "none";
+            document.getElementById($id3).className = "text-sm p-2 bg-gray-200 text-center rounded font-semibold hover:bg-gray-500 hover:text-gray-200"
+            document.getElementById($id2).style.display = "none";
+            document.getElementById($id4).className = "text-sm p-2 bg-gray-200 text-center rounded font-semibold hover:bg-gray-500 hover:text-gray-200"
+            document.getElementById($id5).style.display = "block";
+            document.getElementById($id6).className = "text-sm p-2 bg-gray-500 text-white text-center rounded font-bold"
+        }
+
+        function edit($id11, $id1, $id2, $id3, $id4, $id5, $id6) {
+            document.getElementById($id11).style.display = "block";
+            document.getElementById($id1).disabled = false;
+            document.getElementById($id2).disabled = false;
+            document.getElementById($id3).disabled = false;
+            document.getElementById($id4).style.display = "block";
+            document.getElementById($id5).disabled = false;
+            document.getElementById($id6).style.display = "block";
+        }
+
+        function editIng($id1, $id2, $id3,$id4,$id5) {
+            document.getElementById($id1).disabled = false;
+            document.getElementById($id2).disabled = false;
+            document.getElementById($id3).disabled = false;
+            document.getElementById($id4).style.display = "none";
+            document.getElementById($id5).style.display = "block";
+        }
+
+        function editDish($id1, $id2, $id3,$id4,$id5,$id6,$id7) {
+            document.getElementById($id1).disabled = false;
+            document.getElementById($id2).disabled = false;
+            document.getElementById($id3).disabled = false;
+            document.getElementById($id4).style.display = "none";
+            document.getElementById($id5).style.display = "block";
+            document.getElementById($id6).style.display = "block";
+            document.getElementById($id7).style.display = "none";
+        }
+
+        function toggleModal(modalID) {
+            document.getElementById(modalID).classList.toggle("hidden");
+            document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+            document.getElementById(modalID).classList.toggle("flex");
+            document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+        }
+
+        function showOption($id1,$id2,$id3) {
+            if(document.getElementById($id1).checked == false ){
+                document.getElementById($id2).style.display = "none";
+                document.getElementById($id3).style.display = "none";
+            }
+            else if(document.getElementById($id1).checked == true) {
+                document.getElementById($id2).style.display = "inline-block";
+                document.getElementById($id3).style.display = "inline-block";
+                document.getElementById($id3).innerHTML = "Add";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
