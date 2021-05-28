@@ -10,7 +10,7 @@ const users = instance.sequelize.define("users", {
     },
     userImage: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     userFullName: {
         type: DataTypes.STRING,

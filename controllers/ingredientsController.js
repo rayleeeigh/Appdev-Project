@@ -1,6 +1,8 @@
 const ingredients = require("../models/ingredients")
 const dishes = require("../models/dishes")
 const dish_ingredients = require("../models/dish_ingredients");
+const userDish = require("../models/userDish")
+const { Op } = require("sequelize");
 
 
 exports.readIngredients = async(req, res) => {
@@ -12,13 +14,16 @@ exports.readIngredients = async(req, res) => {
 exports.getIngredients = async(req, res) => {
 
     let data = await ingredients.model.findAll();
-
+    let userDishes = await userDish.model.findAll();
     var x, y, z, m = 0,
         n = 0,
         a, b;
     let dataDI = []
     let dataD = []
     let dataI = []
+    let dishI = []
+    let ingrdt = []
+    let i = []
 
     if (req.body.count > 1) {
         for (x = 0; x < req.body.count; x++) {
@@ -58,9 +63,6 @@ exports.getIngredients = async(req, res) => {
                 raw: true
             })
         }
-
-
-
     }
 
     for (y = 0; y < dataDI.length; y++) {
@@ -77,15 +79,45 @@ exports.getIngredients = async(req, res) => {
 
     }
 
-    for (a = 0; a < dataDI.length; a++) {
+    for (x = 0; x < dataD.length; x++) {
 
-        dataI[n] = await ingredients.model.findOne({
-            where: {
-                ingredientID: dataDI[a].ingredientID
+        dataD[x].check = "0"
+        for (z = 0; z < userDishes.length; z++) {
+            if (userDishes[z].dishID == dataD[x].dishID) {
+                dataD[x].check = "1"
             }
-        })
-        n++;
+        }
+
+        dishI[x] = await dish_ingredients.model.findAll({
+            where: {
+                dishID: dataD[x].dishID
+            }
+        });
+
+        for (y = 0; y < dishI[x].length; y++) {
+            i[y] = dishI[x][y].ingredientID;
+        }
+
+        for (y = 0; y < dishI[x].length; y++) {
+            ingrdt[x] = await ingredients.model.findAll({
+                where: {
+                    ingredientID: {
+                        [Op.in]: i
+                    }
+                }
+            });
+        }
     }
+
+    // for (a = 0; a < dataDI.length; a++) {
+
+    //     dataI[n] = await ingredients.model.findOne({
+    //         where: {
+    //             ingredientID: dataDI[a].ingredientID
+    //         }
+    //     })
+    //     n++;
+    // }
 
     // let data = await dish_ingredients.model.findAll()
 
@@ -93,7 +125,11 @@ exports.getIngredients = async(req, res) => {
 
     // res.send(dataI);
 
-    res.render("generator", { ingredients: data, title: "Dish Generator", dishes: dataD, account: req.session.account });
+    // res.send(dataD);
+
+
+
+    res.render("generator", { ingredients: data, title: "Dish Generator", dishes: dataD, dishingredient: dishI, ingredient: ingrdt, account: req.session.account });
 
 }
 

@@ -29,7 +29,7 @@ exports.login = async(req, res) => {
             req.session.account.created = account.createdAt.getYear()
             res.render("index", { error: 0, title: "Putahe de Amore", account: req.session.account });
         } else {
-            res.render("login", { error: 2, title: "Signup" });
+            res.render("login", { error: 2, title: "Login" });
         }
     } else {
         res.render("login", { error: 1, title: "Login" });
@@ -120,42 +120,41 @@ exports.checkProfile = async(req, res) => {
 exports.checkAdminProfile = async(req, res) => {
 
 
-    if(req.session.account.userType != 1){
+    if (req.session.account.userType != 1) {
         res.redirect("/");
-    }
-    else{
-    let alling = await ingredients.model.findAll()
-    let alldish = await dishes.model.findAll()
+    } else {
+        let alling = await ingredients.model.findAll()
+        let alldish = await dishes.model.findAll()
 
-    var dishI = new Array(alldish.length);
-    var ingrdt = new Array(alldish.length);
-    var i = new Array();
+        var dishI = new Array(alldish.length);
+        var ingrdt = new Array(alldish.length);
+        var i = new Array();
 
-    var x, y;
+        var x, y;
 
-    for (x = 0; x < alldish.length; x++) {
-        dishI[x] = await dish_ingredients.model.findAll({
-            where: {
-                dishID: alldish[x].dishID
-            }
-        });
-
-        for (y = 0; y < dishI[x].length; y++) {
-            i[y] = dishI[x][y].ingredientID;
-        }
-
-        for (y = 0; y < dishI[x].length; y++) {
-            ingrdt[x] = await ingredients.model.findAll({
+        for (x = 0; x < alldish.length; x++) {
+            dishI[x] = await dish_ingredients.model.findAll({
                 where: {
-                    ingredientID: {
-                        [Op.in]: i
-                    }
+                    dishID: alldish[x].dishID
                 }
             });
-        }
-    }
 
-    res.render("adminProfile", { allingredients: alling, dishes: alldish, title: "Profile", dishingredient: dishI, ingredient: ingrdt, account: req.session.account })
+            for (y = 0; y < dishI[x].length; y++) {
+                i[y] = dishI[x][y].ingredientID;
+            }
+
+            for (y = 0; y < dishI[x].length; y++) {
+                ingrdt[x] = await ingredients.model.findAll({
+                    where: {
+                        ingredientID: {
+                            [Op.in]: i
+                        }
+                    }
+                });
+            }
+        }
+
+        res.render("adminProfile", { allingredients: alling, dishes: alldish, title: "Profile", dishingredient: dishI, ingredient: ingrdt, account: req.session.account })
     }
 
 }
