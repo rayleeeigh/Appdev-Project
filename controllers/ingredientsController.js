@@ -87,13 +87,7 @@ exports.getIngredients = async(req, res) => {
         n++;
     }
 
-    // let data = await dish_ingredients.model.findAll()
-
-    // res.send(data)
-
-    // res.send(dataI);
-
-    res.render("generator", { ingredients: data, title: "Dish Generator", dishes: dataD, account: req.session.account });
+    res.render("generator", { ingredients: data, title: "Dish Generator", dishingredient:dataDI, dishes: dataD, account: req.session.account });
 
 }
 

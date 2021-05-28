@@ -60,6 +60,7 @@ exports.createAccount = async(req, res) => {
             userType: 0,
             userBio: " ",
             userUID: req.body.code,
+            userImage: "ppholder.png",
             updatedAt: null
         })
 
