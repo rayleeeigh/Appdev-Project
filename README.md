@@ -3,11 +3,14 @@
 
 To launch the app:<br><br>
 
-Just clone the app<br>
+Clone the app and <br>
+npm install<br><br>
 
-If there are errors:<br>
-npm install
+To run: <br>
+nodemon app<br><br>
 
+Admin Account<br>
+user: rayl@gmail.com password: 123<br>
 
 Collaborators:<br>
 Rayl Regañon<br>
