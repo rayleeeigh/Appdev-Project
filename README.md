@@ -1,10 +1,12 @@
 <h1>Putahe de Amore</h1>
 <br>
-<br>
 
 To launch the app:<br><br>
 
-Just clone the app: npm install
+Just clone the app<br>
+
+If there are errors:<br>
+npm install
 
 
 Collaborators:<br>
