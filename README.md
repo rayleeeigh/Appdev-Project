@@ -10,7 +10,7 @@ To run: <br>
 nodemon app<br><br>
 
 Admin Account<br>
-user: rayl@gmail.com password: 123<br>
+user: rayl@gmail.com password: Atayna123<br>
 
 Collaborators:<br>
 Rayl Regañon<br>
